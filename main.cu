@@ -5,7 +5,7 @@
 // vector : N
 const int N = 1<<12;
 // how many calculations
-const int CALC = 1<<10;
+const int CALC = 1<<12;
 
 #ifdef USE_CUBLAS
 #include <cublas.h>
@@ -36,7 +36,7 @@ static void cublasStatusError( cublasStatus_t err,
 	}
 }
 #else
-void mySgemv(int m,int n,const float *A,const float* x,float *y);
+void mySgemv(int m,int n,const float *alpha,const float *A,const float* x,float *beta,float *y);
 #endif
 
 #define CUDA_HANDLE_ERROR( err ) (cudaHandleError( err, __FILE__, __LINE__ ))
@@ -114,11 +114,11 @@ int main(){
 		}
 	}
 
+	float alpha = 1.0f/N;
+	float beta = 0.0f;
 #ifdef USE_CUBLAS
 	cublasHandle_t cublas_handle;
 	CUBLAS_HANDLE_ERROR(cublasCreate( &cublas_handle ));
-	float alpha = 1.0f/N;
-	float beta = 0.0f;
 #endif
 
 	cudaEvent_t start,stop;
@@ -141,6 +141,7 @@ int main(){
 				&beta,
 				device_vector, 1));
 #else
+		mySgemv(N,N,&alpha,device_matrix,device_matrix,&beta,device_vector);
 #endif
 	}
 	//showResult(host_vector,device_vector);

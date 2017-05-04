@@ -7,11 +7,6 @@ CUBLAS_FLAG=-lcublas
 exec_multitest: $(COMMON_SOURCE) $(MYSGEMV_SOURCE)
 	$(NVCC) $(COMMON_FLAG) $(CUBLAS_FLAG) $(COMMON_SOURCE) $(MYSGEMV_SOURCE) -o $@
 
-exec_cublasSgemv: $(COMMON_SOURCE)
-	$(NVCC) $(COMMON_FLAG) $(CUBLAS_FLAG) $(COMMON_SOURCE) -o $@ -DUSE_CUBLAS
-
-exec_mySgemv: $(COMMON_SOURCE) $(MYSGEMV_SOURCE)
-	$(NVCC) $(COMMON_FLAG) $(COMMON_SOURCE) $(MYSGEMV_SOURCE) -o $@
 
 clean:
 	rm -rf exec*

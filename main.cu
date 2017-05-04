@@ -138,7 +138,7 @@ int main(int argc,char** argv){
 		("help,h",			"show helps")
 		("cublas,c",		"cublasSgemv test mode")
 		("my,m",			"my sgemv method test mode")
-		("number,n",boost::program_options::value<int>()->default_value(N),"matrix size (R^{2^n x 2^n}) (n <= 15)")
+		("number,n",boost::program_options::value<int>()->default_value(N),"matrix size (R^{2^n x 2^n}) (n <= 14)")
 		("times,t",boost::program_options::value<int>()->default_value(CALC),"calculation count ");
 	boost::program_options::variables_map vm;
 	boost::program_options::store(boost::program_options::parse_command_line(argc,argv,opt),vm);

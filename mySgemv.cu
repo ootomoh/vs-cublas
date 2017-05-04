@@ -1,5 +1,5 @@
 #include <stdio.h>
-const int THREADS = 1<<7;
+const int THREADS = 1<<8;
 // s  : single
 // ge : general
 // mv : matrix vector
@@ -41,6 +41,7 @@ __global__ void kernelSgemv1(int n,const float *A,const float *x,float *y){
 }
 
 void mySgemv(int m,int n,const float *alpha,const float *A,const float *x,float *beta,float *y){
-	//kernelSgemv0<<<n/THREADS,THREADS>>>(n,1,*alpha,A,x,*beta,y);
-	kernelSgemv1<<<n,THREADS>>>(n,A,x,y);
+	int threads = (n > THREADS ? THREADS : n);
+	kernelSgemv0<<<n/threads,threads>>>(n,1,*alpha,A,x,*beta,y);
+	//kernelSgemv1<<<n,THREADS>>>(n,A,x,y);
 }

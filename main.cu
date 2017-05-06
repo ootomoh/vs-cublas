@@ -98,12 +98,22 @@ public:
 		CUDA_HANDLE_ERROR(cudaMemset(device_vector_1, 0, vector_size));
 	}
 
-	void cublasSgemvTest(int calc){
+	typedef void(SgemvTest::*Func)(int);
+
+	static void measureElapsedTime(Func func, SgemvTest* sgemTest,int calc){
 		cudaEvent_t start,stop;
 		float elapsed_time;
 		CUDA_HANDLE_ERROR(cudaEventCreate( &start ));
 		CUDA_HANDLE_ERROR(cudaEventCreate( &stop));
 		CUDA_HANDLE_ERROR(cudaEventRecord( start , 0));
+		(sgemTest->*func)(calc);
+		CUDA_HANDLE_ERROR(cudaEventRecord( stop , 0));
+		CUDA_HANDLE_ERROR(cudaEventSynchronize( stop ));
+		CUDA_HANDLE_ERROR(cudaEventElapsedTime( &elapsed_time, start, stop));
+		std::cout<<"elapsed_time = "<<(elapsed_time/calc)<<"[ms]"<<std::endl;
+	}
+
+	void cublasSgemvTest(int calc){
 		for(int c= 0;c< calc;c++){
 			CUBLAS_HANDLE_ERROR(cublasSgemv(
 						cublas_handle,
@@ -116,24 +126,11 @@ public:
 						&beta,
 						device_vector_1, 1));
 		}
-		CUDA_HANDLE_ERROR(cudaEventRecord( stop , 0));
-		CUDA_HANDLE_ERROR(cudaEventSynchronize( stop ));
-		CUDA_HANDLE_ERROR(cudaEventElapsedTime( &elapsed_time, start, stop));
-		std::cout<<"elapsed_time = "<<(elapsed_time/calc)<<"[ms]"<<std::endl;
 	}
 	void mySgemvTest(int calc){
-		cudaEvent_t start,stop;
-		float elapsed_time;
-		CUDA_HANDLE_ERROR(cudaEventCreate( &start ));
-		CUDA_HANDLE_ERROR(cudaEventCreate( &stop));
-		CUDA_HANDLE_ERROR(cudaEventRecord( start , 0));
 		for(int c= 0;c< calc;c++){
 			mySgemv(n,n,&alpha,device_matrix,device_vector_0,&beta,device_vector_1);
 		}
-		CUDA_HANDLE_ERROR(cudaEventRecord( stop , 0));
-		CUDA_HANDLE_ERROR(cudaEventSynchronize( stop ));
-		CUDA_HANDLE_ERROR(cudaEventElapsedTime( &elapsed_time, start, stop));
-		std::cout<<"elapsed_time = "<<(elapsed_time/calc)<<"[ms]"<<std::endl;
 	}
 };
 
@@ -164,12 +161,12 @@ int main(int argc,char** argv){
 		SgemvTest sgemTest(1<<n);
 		sgemTest.init();
 		std::cout<<"-- cublasSgemvTest --"<<std::endl;
-		sgemTest.cublasSgemvTest(calc);
+		SgemvTest::measureElapsedTime(&SgemvTest::cublasSgemvTest,&sgemTest,calc);
 	}
 	if(vm.count("my")){
 		SgemvTest sgemTest(1<<n);
 		sgemTest.init();
 		std::cout<<"-- mySgemvTest --"<<std::endl;
-		sgemTest.mySgemvTest(calc);
+		SgemvTest::measureElapsedTime(&SgemvTest::mySgemvTest,&sgemTest,calc);
 	}
 }

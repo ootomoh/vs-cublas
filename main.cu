@@ -70,13 +70,18 @@ public:
 	CUBLAS_HANDLE_ERROR(cublasCreate( &cublas_handle ));
 	}
 	~SgemvTest(){
+		/*CUDA_HANDLE_ERROR( cudaMemcpy( host_vector_1, device_vector_1 , vector_size,cudaMemcpyDeviceToHost) );
+		for(int i = 0;i  <n;i++){
+			std::cout<<host_vector_1[i]<<",";
+		}
+		std::cout<<std::endl;*/
 		CUDA_HANDLE_ERROR(cudaFree( device_matrix ));
 		CUDA_HANDLE_ERROR(cudaFree( device_vector_0 ));
 		CUDA_HANDLE_ERROR(cudaFree( device_vector_1 ));
 		CUDA_HANDLE_ERROR(cudaFreeHost( host_matrix ));
 		CUDA_HANDLE_ERROR(cudaFreeHost( host_vector_0 ));
 		CUDA_HANDLE_ERROR(cudaFreeHost( host_vector_1 ));
-	CUBLAS_HANDLE_ERROR(cublasDestroy( cublas_handle ));
+		CUBLAS_HANDLE_ERROR(cublasDestroy( cublas_handle ));
 	}
 
 	void init(){

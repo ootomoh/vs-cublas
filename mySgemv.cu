@@ -18,30 +18,7 @@ __global__ void kernelSgemv0(int n,int s,const float alpha,const float *A,const 
 		*res_y = beta * *res_y + dot;
 	}
 }
-
-__global__ void kernelSgemv1(int n,const float *A,const float *x,float *y){
-	__shared__ float cache[THREADS];
-	int j = blockIdx.x;
-	int i = threadIdx.x;
-	cache[i] = 0.0f;
-	while(i < n){
-		cache[threadIdx.x] += A[j+i*n]*x[i];
-		i+=THREADS;
-	}
-	__syncthreads();
-	int mod = 1;
-	while(mod<THREADS){
-		mod<<=1;
-		if(threadIdx.x%mod==0){
-			cache[threadIdx.x] += cache[threadIdx.x+mod/2];
-		}
-		__syncthreads();
-	};
-	y[j] = cache[0];
-}
-
 void mySgemv(int m,int n,const float *alpha,const float *A,const float *x,float *beta,float *y){
 	int threads = (n > THREADS ? THREADS : n);
 	kernelSgemv0<<<n/threads,threads>>>(n,1,*alpha,A,x,*beta,y);
-	//kernelSgemv1<<<n,THREADS>>>(n,A,x,y);
 }

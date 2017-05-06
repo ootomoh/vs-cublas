@@ -1,0 +1,75 @@
+-----
+matrix size : 1 x 1
+calculation count : 4096
+-- cublasSgemvTest --
+elapsed_time = 0.00314424[ms]
+-----
+matrix size : 2 x 2
+calculation count : 4096
+-- cublasSgemvTest --
+elapsed_time = 0.00313065[ms]
+-----
+matrix size : 4 x 4
+calculation count : 4096
+-- cublasSgemvTest --
+elapsed_time = 0.00315622[ms]
+-----
+matrix size : 8 x 8
+calculation count : 4096
+-- cublasSgemvTest --
+elapsed_time = 0.00318926[ms]
+-----
+matrix size : 16 x 16
+calculation count : 4096
+-- cublasSgemvTest --
+elapsed_time = 0.00322578[ms]
+-----
+matrix size : 32 x 32
+calculation count : 4096
+-- cublasSgemvTest --
+elapsed_time = 0.00343219[ms]
+-----
+matrix size : 64 x 64
+calculation count : 4096
+-- cublasSgemvTest --
+elapsed_time = 0.00356216[ms]
+-----
+matrix size : 128 x 128
+calculation count : 4096
+-- cublasSgemvTest --
+elapsed_time = 0.00403156[ms]
+-----
+matrix size : 256 x 256
+calculation count : 4096
+-- cublasSgemvTest --
+elapsed_time = 0.00714402[ms]
+-----
+matrix size : 512 x 512
+calculation count : 4096
+-- cublasSgemvTest --
+elapsed_time = 0.0139049[ms]
+-----
+matrix size : 1024 x 1024
+calculation count : 4096
+-- cublasSgemvTest --
+elapsed_time = 0.0446475[ms]
+-----
+matrix size : 2048 x 2048
+calculation count : 4096
+-- cublasSgemvTest --
+elapsed_time = 0.167607[ms]
+-----
+matrix size : 4096 x 4096
+calculation count : 4096
+-- cublasSgemvTest --
+elapsed_time = 0.66007[ms]
+-----
+matrix size : 8192 x 8192
+calculation count : 4096
+-- cublasSgemvTest --
+elapsed_time = 2.60997[ms]
+-----
+matrix size : 16384 x 16384
+calculation count : 4096
+-- cublasSgemvTest --
+elapsed_time = 10.4348[ms]
